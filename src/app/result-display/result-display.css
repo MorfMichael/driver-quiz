@@ -3,7 +3,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     gap: .2rem;
-    position: fixed;
+    position: absolute;
     margin: 1rem;
     bottom: 0;
     left: 0;
