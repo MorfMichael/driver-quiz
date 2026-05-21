@@ -1,3 +1,7 @@
-@for (catalog of catalogs(); track catalog) {
-    <button (click)="setCatalog(catalog)">{{ catalog }}</button>
-}
+<div class="container">
+  @for (catalog of catalogs(); track catalog) {
+  <button (click)="setCatalog(catalog)">
+    <h1>{{ catalog }}</h1>
+  </button>
+  }
+</div>
