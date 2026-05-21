@@ -7,9 +7,9 @@
   <h1>{{ _question.text }}</h1>
 
   @for (answer of _question.answers; track $index) {
-    <div>
-      <button (click)="selectAnswer(_question.id, answer)" [disabled]="showResult">{{ $index+1 }}</button>
-      <span>{{ answer.text }}</span>
+    <div class="answer">
+      <button (click)="selectAnswer($index)" [disabled]="showResult" [style.background-color]="showResult && result()?.answerId == $index ? 'lightblue' : null">{{ $index+1 }}</button>
+      <h3>@if (showResult) { {{ answer.correct ? '✅' : '❌' }} } {{ answer.text }}</h3>
     </div>
   }
 }
@@ -23,3 +23,5 @@
   }
   </div>
 }
+
+<app-result-display />

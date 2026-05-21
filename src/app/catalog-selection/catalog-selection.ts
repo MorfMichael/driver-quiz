@@ -13,8 +13,9 @@ export class CatalogSelection implements OnInit {
 
   catalogs = computed<Set<string>>(() => this._catalogs());
 
-  ngOnInit() {
-    this._catalogService.getCatalogs().then(d => this._catalogs.set(d));
+  async ngOnInit(): Promise<void> {
+    const catalogs = await this._catalogService.getCatalogs();
+    this._catalogs.set(catalogs);
   }
   
   setCatalog(catalog: string) {

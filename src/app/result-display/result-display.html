@@ -1,0 +1,5 @@
+<div class="result-bar">
+  @for (result of results(); track result.questionId) {
+    <a [routerLink]="'/question/'+result.questionId" class="block" [class]="result.correct !== undefined ? (result.correct ? 'block-right' : 'block-wrong') : null" [title]="result.questionId"></a>
+  }
+</div>

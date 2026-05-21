@@ -1,9 +1,11 @@
 import { Component, computed, effect, inject, input, OnInit, signal } from '@angular/core';
-import { Answer, Question, QuestionService } from '../service/question.service';
+import { Answer, Question, QuestionService, Result } from '../service/question.service';
+import { ResultDisplay } from "../result-display/result-display";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-question-display',
-  imports: [],
+  imports: [CommonModule, ResultDisplay],
   templateUrl: './question-display.html',
   styleUrl: './question-display.css',
   host: {
@@ -15,22 +17,30 @@ export class QuestionDisplay {
   
   id = input<string>();
   question = computed<Question | null>(() => this._questionService.question());
-  result = signal<boolean | undefined>(undefined);
+  result = computed<Result | undefined>(() => this._questionService.resultOfQuestion());
 
   constructor() {
     effect(() => {
       const id = this.id();
       this._questionService.nextQuestion(id);
     });
+
+    effect(() => {
+      const result = this.result();
+      console.log('result changed!');
+    })
   }
 
-  selectAnswer(questionId: string, answer: Answer) {
-    this.result.set(answer.correct);
+  selectAnswer(index: number) {
+    const question = this.question();
+    if (!question) {
+      return;
+    }
+    const answer = question.answers[index];
 
-    this._questionService.addResult({ correct: answer.correct, questionId: questionId });
+    this._questionService.addResult({ correct: answer.correct, questionId: question.id, answerId: index });
 
     setTimeout(() => {
-      this.result.set(undefined);
       this._questionService.nextQuestion();
     }, 2000);
   }
@@ -43,16 +53,16 @@ export class QuestionDisplay {
 
     switch (event.key) {
       case '1':
-        this.selectAnswer(question.id, question.answers[0]);
+        this.selectAnswer(0);
         break;
       case '2':
-        this.selectAnswer(question.id, question.answers[1]);
+        this.selectAnswer(1);
         break;
       case '3':
-        this.selectAnswer(question.id, question.answers[2]);
+        this.selectAnswer(2);
         break;
       case '4':
-        this.selectAnswer(question.id, question.answers[3]);
+        this.selectAnswer(3);
         break;
     }
   }
