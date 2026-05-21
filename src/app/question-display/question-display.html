@@ -1,0 +1,25 @@
+@let _question = question();
+@let _result = result();
+@let showResult = _result !== undefined;
+<p>{{ _question?.id }}</p>
+
+@if (_question) {
+  <h1>{{ _question.text }}</h1>
+
+  @for (answer of _question.answers; track $index) {
+    <div>
+      <button (click)="selectAnswer(_question.id, answer)" [disabled]="showResult">{{ $index+1 }}</button>
+      <span>{{ answer.text }}</span>
+    </div>
+  }
+}
+
+@if (showResult) {
+  <div>
+  @if (_result) {
+    <h2 style="color: green;"> &#127881; RICHTIG </h2>
+  } @else {
+    <h2 style="color: red;"> &#9940; FALSCH </h2>
+  }
+  </div>
+}
