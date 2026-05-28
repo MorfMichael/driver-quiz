@@ -16,10 +16,15 @@ import { Router } from '@angular/router';
 export class QuestionDisplay {
   private _service = inject(DataService);
   private _router = inject(Router);
-  
+
   id = input<string>();
   question = computed<Question | null>(() => this._service.question());
   result = computed<Result | undefined>(() => this._service.resultOfQuestion());
+
+  catalog = computed(() => this._service.catalog());
+
+  totalCount = computed(() => this._service.filteredQuestions().length);
+  count = computed(() => this._service.results().length);
 
   constructor() {
     effect(() => {
@@ -30,7 +35,7 @@ export class QuestionDisplay {
 
   selectAnswer(index: number) {
     const question = this.question();
-    if (!question) {
+    if (!question || this.result()) {
       return;
     }
     const answer = question.answers[index];
@@ -44,19 +49,25 @@ export class QuestionDisplay {
     }
 
     if (event.key === '1') {
-        this.selectAnswer(0);
+      this.selectAnswer(0);
     } else if (event.key === '2') {
       this.selectAnswer(1);
     } else if (event.key === '3') {
       this.selectAnswer(2);
     } else if (event.key === '4') {
       this.selectAnswer(3);
-    } else if (event.code === 'Space' || event.code === 'Enter' || event.code === 'NumpadEnter' || event.code === 'ArrowRight') {
-      if (this.id()) {
-        this._router.navigate(['question']);
+    } else if (event.code === 'Space' || event.code === 'Enter' || event.code === 'NumpadEnter') {
+      this.nextQuestion();
+    } else if (event.code === 'ArrowRight') {
+      const id = this.id();
+      const results = this._service.results();
+      let index = results.findIndex(d => d.questionId == id);
+      if (index > -1 && index < results.length - 1) {
+        index += 1;
       } else {
-        this.nextQuestion();
+        index = 0;
       }
+      this._router.navigate(['question', results[index].questionId]);
     } else if (event.code === 'ArrowLeft') {
       const id = this.id();
       const results = this._service.results();
@@ -64,14 +75,17 @@ export class QuestionDisplay {
       if (index < 1) {
         index = results.length;
       }
-      const previousId = results[index-1].questionId;
-      console.log(previousId,index);
+      const previousId = results[index - 1].questionId;
       this._router.navigate(['question', previousId]);
     }
   }
 
   nextQuestion(id?: string) {
-    this._service.nextQuestion(id);
+    if (this._service.openQuestions().length === 0) {
+      this._router.navigate(['finish']);
+    } else {
+      this._service.nextQuestion(id);
+    }
   }
 
   reset() {

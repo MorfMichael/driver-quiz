@@ -7,8 +7,8 @@
   <div class="container">
     <div class="header">
       <div>{{ _question?.id }}</div>
+      <div><b>{{ catalog() }}:</b> {{ count() }} / {{ totalCount() }} </div>
       <button (click)="reset()">reset</button>
-      <div></div>
     </div>
 
     <h1>{{ _question.text }}</h1>
@@ -35,12 +35,4 @@
     <app-result-display />
   </div>
 </main>
-} @else {
-<button (click)="reset()">reset</button>
-<iframe src="https://www.youtube.com/embed/I4x6Cp9UKXY?autoplay=1" title="New kids Lastkraftwagen Fahrer"
-  frameborder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-  referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="allowfullscreen"
-  mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen"
-  webkitallowfullscreen="webkitallowfullscreen"></iframe>
 }

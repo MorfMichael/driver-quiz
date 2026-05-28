@@ -1,11 +1,14 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import questions from './questions.json';
+import { Router } from '@angular/router';
 
 const CATALOG_KEY: string = 'catalog';
 const RESULTS_KEY: string = 'results';
 
 @Injectable({ providedIn: 'root' })
 export class DataService {
+  private _router = inject(Router);
+
   private _catalogs = signal<Set<string>>(new Set<string>());
   private _catalog = signal<string | null>(null);
 
@@ -58,9 +61,14 @@ export class DataService {
       this._question.set(question!);
     } else {
       const questions = this.openQuestions();
-      let rand = Math.ceil(Math.random() * (questions.length-1));
-      console.log(rand, questions.length);
-      this._question.set(questions[rand]);
+      let nextId = '1';
+      if (questions.length > 0) {
+        let rand = Math.ceil(Math.random() * (questions.length-1));
+        nextId = questions[rand].id;
+      } else {
+        nextId = this.results()[0].questionId;
+      }
+      this._router.navigate(['question', nextId]);
     }
   }
 
