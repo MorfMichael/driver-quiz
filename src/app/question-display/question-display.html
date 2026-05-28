@@ -1,27 +1,46 @@
 @let _question = question();
 @let _result = result();
 @let showResult = _result !== undefined;
-<p>{{ _question?.id }}</p>
 
 @if (_question) {
-  <h1>{{ _question.text }}</h1>
+<main>
+  <div class="container">
+    <div class="header">
+      <div>{{ _question?.id }}</div>
+      <button (click)="reset()">reset</button>
+      <div></div>
+    </div>
 
-  @for (answer of _question.answers; track $index) {
+    <h1>{{ _question.text }}</h1>
+
+    @for (answer of _question.answers; track $index) {
     <div class="answer">
-      <button (click)="selectAnswer($index)" [disabled]="showResult" [style.background-color]="showResult && result()?.answerId == $index ? 'lightblue' : null">{{ $index+1 }}</button>
+      <button (click)="selectAnswer($index)" [disabled]="showResult"
+        [style.background-color]="showResult && result()?.answerId == $index ? 'lightblue' : null">{{ $index+1
+        }}</button>
       <h3>@if (showResult) { {{ answer.correct ? '✅' : '❌' }} } {{ answer.text }}</h3>
     </div>
-  }
-}
+    }
 
-@if (showResult) {
-  <div>
-  @if (_result.correct) {
-    <h2 style="color: green;"> &#127881; RICHTIG </h2>
-  } @else {
-    <h2 style="color: red;"> &#9940; FALSCH </h2>
-  }
+    @if (showResult) {
+    <div class="flex">
+      @if (_result.correct) {
+      <h2 style="color: green;"> &#127881; RICHTIG </h2>
+      } @else {
+      <h2 style="color: red;"> &#9940; FALSCH </h2>
+      }
+      <button class="next-button" (click)="nextQuestion()">WEITER</button>
+    </div>
+    }
+    <app-result-display />
   </div>
+</main>
+} @else {
+<button (click)="reset()">reset</button>
+<iframe src="https://www.youtube.com/embed/I4x6Cp9UKXY?autoplay=1" title="New kids Lastkraftwagen Fahrer"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="allowfullscreen"
+  mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen"
+  webkitallowfullscreen="webkitallowfullscreen"></iframe>
 }
-
-<app-result-display />

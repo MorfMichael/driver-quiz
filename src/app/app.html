@@ -1,11 +1,7 @@
-<main>
-  <div class="container">
-    @if (!catalog()) {
-      <app-catalog-selection />
-    }
-    @else
-    {
-    <router-outlet />
-    }
-  </div>
-</main>
+@if (!catalog()) {
+<app-catalog-selection />
+}
+@else
+{
+<router-outlet />
+}

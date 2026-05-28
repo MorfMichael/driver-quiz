@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { CatalogService } from './service/catalog.service';
 import { CatalogSelection } from './catalog-selection/catalog-selection';
+import { DataService } from './service/data.service';
 
 @Component({
   selector: 'app-root',
@@ -11,10 +11,10 @@ import { CatalogSelection } from './catalog-selection/catalog-selection';
 })
 export class App {
   private _router = inject(Router);
-  private _catalogService = inject(CatalogService);
+  private _service = inject(DataService);
 
   protected readonly title = signal('driver-quiz');
-  catalog = computed<string | null>(() => this._catalogService.catalog());
+  catalog = computed<string | null>(() => this._service.catalog());
 
   constructor() {
     effect(() => {
